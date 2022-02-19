@@ -1,7 +1,10 @@
 const app = require('./app');
 
-function init () {
+async function init () {
 
+    await app.listen(3000);
+
+    console.log('Server on port 3000');
 
 };
 
