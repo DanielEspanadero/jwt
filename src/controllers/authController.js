@@ -1,6 +1,9 @@
 const { Router } = require('express');
 const router = Router();
 
+const jwt = require('jsonwebtoken');
+const config = require('../config');
+
 const User = require('../models/User');
 
 // Proceso de registro
@@ -14,9 +17,14 @@ router.post('/signup', async (req, res, next) => {
     // Encriptando la contraseña que pasa el usuario.
     user.password = await user.encryptPassword(user.password);
     await user.save();
-    console.log(user);
+
+    const token = jwt.sign({id: user._id}, config.secret, {
+        expiresIn: 60 * 60 * 24
+    });
+
     res.json({
-        msg: 'Received'
+        auth: true,
+        token
     });
 });
 
