@@ -7,11 +7,16 @@ const userSchema = new Schema({
     password: String
 });
 
-// Encriptación de la contraseña
+// Encriptación de la contraseña.
 userSchema.methods.encryptPassword = async (password) => {
     // genSant indica cuantas veces queremos aplicar el algoritmo para hacerlo más seguro.
     const salt = await bcrypt.genSalt(10);
     return bcrypt.hash(password, salt);
-}
+};
+
+// Validación de la contraseña.
+userSchema.methods.validatePassword = async function (password) {
+    return bcrypt.compare(password, this.password);
+};
 
 module.exports = model('user', userSchema);
